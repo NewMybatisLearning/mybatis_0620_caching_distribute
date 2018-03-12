@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ymd.learn.mapper.UserMapper">
+	
+	<!-- 
+	开启本mapper的namespace下的二级缓存
+    type:指定cache接口的实现类的类型，不写type属性，mybatis默认使用PerpetualCache
+    要和ehcache整合，需要配置type为ehcache实现cache接口的类型 -->
+	<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
+	
+	<select id="getUserById" parameterType="int"
+		resultType="com.ymd.learn.model.User">
+		select * from t_user where id = #{id}
+	</select>
+
+	<update id="updateUserById" parameterType="com.ymd.learn.model.User">
+		update t_user set name
+		= #{name} where id = #{id}
+	</update>
+
+	<insert id="insertUser" parameterType="com.ymd.learn.model.User">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into t_user(name) values (#{name})
+	</insert>
+
+
+</mapper>
